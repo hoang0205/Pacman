@@ -1,10 +1,10 @@
 #include "Ghost.h"
-
-Ghost::Ghost()
+#include "BaseFunction.h"
+Ghost::Ghost(int x, int y)
 {
 	frame_ = 0;
-	x_pos_ = 1150;
-	y_pos_ = 150;
+	x_pos_ = x;
+	y_pos_ = y;
 	x_val_ = 0;
 	y_val_ = 0;
 	width_frame_ = 0;
@@ -19,9 +19,9 @@ Ghost::~Ghost()
 {
 	Free();
 }
-int GetRandom(int min, int max) 
+int GetRandom(int min, int max)
 {
-	return min + (int)(rand() * (max - min + 1.0) / (1.0 + RAND_MAX));
+	return min + (int)(rand() % (max - min + 1));
 }
 bool Ghost::LoadImg(std::string path, SDL_Renderer* screen)
 {
@@ -69,22 +69,22 @@ void Ghost::Show(SDL_Renderer* des)
 	{
 	case WALK_LEFT:
 	{
-		LoadImg("img//player_left.png", des);
+		LoadImg("img//ghost_left.png", des);
 	}
 	break;
 	case WALK_RIGHT:
 	{
-		LoadImg("img//player_right.png", des);
+		LoadImg("img//ghost_right.png", des);
 	}
 	break;
 	case WALK_UP:
 	{
-		LoadImg("img//player_up.png", des);
+		LoadImg("img/ghost_up.png", des);
 	}
 	break;
 	case WALK_DOWN:
 	{
-		LoadImg("img//player_down.png", des);
+		LoadImg("img//ghost_down.png", des);
 	}
 	break;
 	}
@@ -114,7 +114,6 @@ void Ghost::Show(SDL_Renderer* des)
 void Ghost::SimpleAI(SDL_Event events, SDL_Renderer* screen)
 {
 	int ai = GetRandom(1, 4);
-	if (events.type == SDL_KEYDOWN)
 	{
 		switch (ai)
 		{
@@ -158,46 +157,7 @@ void Ghost::SimpleAI(SDL_Event events, SDL_Renderer* screen)
 			break;
 		}
 	}
-	else if (events.type == SDL_KEYUP)
-	{
-		switch (ai)
-		{
-		case 1:
-		{
-			input_type_.right_ = 0;
-			input_type_.left_ = 0;
-			input_type_.up_ = 0;
-			input_type_.down_ = 0;
-		}
-		break;
-		case 2:
-		{
-			input_type_.right_ = 0;
-			input_type_.left_ = 0;
-			input_type_.up_ = 0;
-			input_type_.down_ = 0;
-		}
-		break;
-		case 3:
-		{
-			input_type_.right_ = 0;
-			input_type_.left_ = 0;
-			input_type_.up_ = 0;
-			input_type_.down_ = 0;
-		}
-		break;
-		case 4:
-		{
-			input_type_.right_ = 0;
-			input_type_.left_ = 0;
-			input_type_.up_ = 0;
-			input_type_.down_ = 0;
-		}
-		break;
-		default:
-			break;
-		}
-	}
+
 }
 
 void Ghost::DoGhost(Map& map_data)
@@ -259,10 +219,6 @@ void Ghost::CheckToMap(Map& map_data)
 			y1 = y1 / TILE_SIZE;
 			y2 = y1 + 1;
 		}
-		/*if (map_data.tile[y1][x1] == 3 || map_data.tile[y1][x2] == 3 || map_data.tile[y2][x1] == 3 || map_data.tile[y2][x2] == 3)
-		{
-			return;
-		}*/
 		if (map_data.tile[y1][x1] > 1 && map_data.tile[y1][x1] != 3)
 		{
 			x_pos_ -= x_val_;
@@ -285,4 +241,49 @@ void Ghost::CheckToMap(Map& map_data)
 		}
 	}
 
+}
+bool Ghost::checkWall(Map map_data)
+{
+	int x1, x2, y1, y2;
+		x1 = int(x_pos_);
+		y1 = int(y_pos_);
+		if (int(x_pos_) % TILE_SIZE == 0)
+		{
+			x1 = x1 / TILE_SIZE;
+			x2 = x1;
+		}
+		else
+		{
+			x1 = x1 / TILE_SIZE;
+			x2 = x1 + 1;
+		}
+		if (int(y_pos_) % TILE_SIZE == 0)
+		{
+			y1 = y1 / TILE_SIZE;
+			y2 = y1;
+		}
+		else
+		{
+			y1 = y1 / TILE_SIZE;
+			y2 = y1 + 1;
+		}
+		if (x1 == MAX_MAP_X - 1) return false;
+		if (y1 == MAX_MAP_Y - 1) return false;
+		if (map_data.tile[y1][x1] > 1 && map_data.tile[y1][x1] != 3)
+		{
+			return false;
+		}
+		else if (map_data.tile[y1][x2] > 1 && map_data.tile[y1][x2] != 3)
+		{
+			return false;
+		}
+		else if (map_data.tile[y2][x1] > 1 && map_data.tile[y2][x1] != 3)
+		{
+			return false;
+		}
+		else if (map_data.tile[y2][x2] > 1 && map_data.tile[y2][x2] != 3)
+		{
+			return false;
+		}
+		return true;
 }

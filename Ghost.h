@@ -10,7 +10,7 @@
 class Ghost : public BaseObject
 {
 public:
-	Ghost();
+	Ghost(int x, int y);
 	~Ghost();
 
 	enum WalkType
@@ -20,20 +20,20 @@ public:
 		WALK_UP = 2,
 		WALK_DOWN = 3,
 	};
-
+	int x_pos_;
+	int y_pos_;
 	bool LoadImg(std::string path, SDL_Renderer* screen);
 	void Show(SDL_Renderer* des);
 	void set_clips();
 	void SimpleAI(SDL_Event events, SDL_Renderer* screen);
 	void DoGhost(Map& map_data);
 	void CheckToMap(Map& map_data);
-
+	bool checkWall(Map map_data);
 private:
 	float x_val_;
 	float y_val_;
 
-	float x_pos_;
-	float y_pos_;
+
 
 	int width_frame_;
 	int height_frame_;
@@ -44,5 +44,4 @@ private:
 	int status_;
 
 };
-
 #endif // !GHOST_H_

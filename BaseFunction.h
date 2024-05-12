@@ -23,11 +23,12 @@ const int RENDER_DRAW_COLOR = 255;
 
 const int FRAME_PER_SECOND = 25;
 
+const int NUMBER_OF_GHOST = 5;
+const int MAX_POINT = 403;
+
 #define TILE_SIZE 32
 #define MAX_MAP_X 42
 #define MAX_MAP_Y 14
-
-
 
 struct Map
 {

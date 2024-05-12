@@ -1,4 +1,7 @@
 ﻿#include "Character.h"
+#include <Windows.h>
+#include <sstream>
+#include <string>
 
 MainObject::MainObject()
 {
@@ -259,29 +262,24 @@ void MainObject::CheckToMap(Map& map_data)
 		if (map_data.tile[y1][x1] == 1)
 		{
 			map_data.tile[y1][x1] = 0;
+			Point++;
 		}
 		if (map_data.tile[y1][x2] == 1)
 		{
 			map_data.tile[y1][x2] = 0;
+			Point++;
 		}
 		if(map_data.tile[y2][x1] == 1)
 		{
 			map_data.tile[y2][x1] = 0;
+			Point++;
 		}
 		if (map_data.tile[y2][x2] == 1)
 		{
 			map_data.tile[y2][x2] = 0;
+			Point++;	
 		}
 		
-		/*if (map_data.tile[y1][x1] == 1 || map_data.tile[y1][x2] == 1 || map_data.tile[y2][x1] == 1 || map_data.tile[y2][x2] == 1)
-		{
-			map_data.tile[y1][x1] = 0;
-			map_data.tile[y1][x2] = 0;
-			map_data.tile[y2][x1] = 0; 
-			map_data.tile[y2][x2] = 0;
-			
-		}
-		else*/
 		if (map_data.tile[y1][x1] > 0 || map_data.tile[y1][x2] > 0 || map_data.tile[y2][x1] > 0 || map_data.tile[y2][x2] > 0)
 		{
 			x_pos_ -= x_val_;
@@ -289,4 +287,50 @@ void MainObject::CheckToMap(Map& map_data)
 		}
 	}
 
+}
+void MainObject::CheckGhost(Ghost ghost)
+{
+	bool game_over = false;
+	if (x_pos_ < ghost.x_pos_ && ghost.x_pos_ < x_pos_ + TILE_SIZE && y_pos_ < ghost.y_pos_ && ghost.y_pos_ < y_pos_ + TILE_SIZE)
+	{
+		game_over = true;
+	}
+	if (x_pos_ > ghost.x_pos_ && ghost.x_pos_ + TILE_SIZE > x_pos_ && y_pos_ < ghost.y_pos_ && ghost.y_pos_ < y_pos_ + TILE_SIZE)
+	{
+		game_over = true;
+	}
+	if (x_pos_ < ghost.x_pos_ && ghost.x_pos_ < x_pos_ + TILE_SIZE && y_pos_ < ghost.y_pos_ + TILE_SIZE && ghost.y_pos_ < y_pos_)
+	{
+		game_over = true;
+	}
+	if (x_pos_ > ghost.x_pos_ && ghost.x_pos_ + TILE_SIZE > x_pos_ && y_pos_ < ghost.y_pos_ + TILE_SIZE && ghost.y_pos_ < y_pos_)
+	{
+		game_over = true;
+	}
+	if (game_over == true)
+	{
+		int Score = Point * 100;
+		std::wstring message = L"Game Over\nYour Score is: " + std::to_wstring(Score);
+
+		int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow);
+		{
+			MessageBox(NULL, message.c_str(), L"Notification", MB_OK | MB_ICONQUESTION);
+			alive = false;
+			SDL_Quit();
+			//return 0;
+		}
+	}
+}
+void MainObject::endGame()
+{
+	if (Point == MAX_POINT)
+	{
+		int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow);
+		{
+			MessageBox(NULL, L"You won :))", L"Congratulation", MB_OK | MB_ICONQUESTION);
+			alive = false;
+			SDL_Quit();
+			//return 0;
+		}
+	}
 }
