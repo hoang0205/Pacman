@@ -7,7 +7,10 @@
 #include <vector>
 #include <ctime>
 #include <iostream>
+#include "Text.h"
+
 BaseObject g_background;
+TTF_Font* font = NULL;
 
 bool InitData()
 {
@@ -19,7 +22,22 @@ bool InitData()
     }
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+    if (TTF_Init() == -1)
+    {
 
+        success = false;
+    }
+    font = TTF_OpenFont("font//dlxfont_.ttf", 12);
+    if (font == NULL)
+    {
+        printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+        success = false;
+    }
+    if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+    {   
+        printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+        success = false;
+    }
     g_window = SDL_CreateWindow("Pacman", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (g_window == NULL)
     {
@@ -38,6 +56,7 @@ bool InitData()
             int imgFlags = IMG_INIT_PNG;
             if (!(IMG_Init(imgFlags) && imgFlags)) success = false;
         }
+
     }
     return success;
 }
@@ -78,7 +97,7 @@ int main(int argc, char* argv[])
     MainObject p_player;
     p_player.LoadImg("img//player_right.png", g_screen);
     p_player.set_clips();
-        srand(time(0));
+    srand(time(0));
     std::vector<Ghost> g_ghost;
     int x = 0, y = 0;
     while(g_ghost.size() < NUMBER_OF_GHOST)
@@ -95,6 +114,12 @@ int main(int argc, char* argv[])
         g_ghost[i].LoadImg("img//ghost_right.png", g_screen);
         g_ghost[i].set_clips();
     }
+
+    TextObject time_game;
+    time_game.SetColor(TextObject::RED_);
+
+    Mix_Chunk* newSound = Mix_LoadWAV("sound/pacman.wav");
+
     bool is_quit = false;
     while (!is_quit)
     {
@@ -121,8 +146,22 @@ int main(int argc, char* argv[])
         for (int i = 0; i < NUMBER_OF_GHOST; i++) p_player.CheckGhost(g_ghost[i]);
         p_player.Show(g_screen);
         for (int i = 0; i < NUMBER_OF_GHOST; i++) g_ghost[i].Show(g_screen);
-        
+        p_player.endGame();
+        if (p_player.alive == 0) break;
         SDL_RenderPresent(g_screen);
+
+        std::string str_time = "Time: ";
+        Uint32 time_val = SDL_GetTicks() / 1000;
+        std::string str_val = std::to_string(time_val);
+        str_time += str_val;
+
+
+        time_game.SetText(str_time);
+        time_game.LoadFromRenderText(font, g_screen);
+        time_game.renderText(g_screen, SCREEN_WIDTH - 200, 15);
+        
+        Mix_PlayChannel(-1, newSound, -1);
+
         int real_imp_time = fps_timer.get_ticks();
         int time_one_frame = 1000 / FRAME_PER_SECOND;
 
@@ -132,10 +171,8 @@ int main(int argc, char* argv[])
             if(delay_time >= 0)
             SDL_Delay(delay_time);
         }
-        p_player.endGame();
-        if (p_player.alive == false) break;
+        
     }
-
     close();
 
     return 0;
