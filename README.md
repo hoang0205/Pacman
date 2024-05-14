@@ -12,5 +12,5 @@ Use the WASD to control Pacman.
 ## Rule
 This is a hard game because if you die once, the game is over.
 ## Source
-lazyfoo.net/tutorials/SDL/  
+[lazyfoo.net/tutorials/SDL/ ](https://lazyfoo.net/tutorials/SDL/)  
 https://phattrienphanmem123az.com/lap-trinh-game-c-p2
