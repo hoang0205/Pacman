@@ -22,7 +22,7 @@ public:
 		WALK_DOWN = 3,
 	};
 	int Point = 0;
-	bool alive = true;
+	int alive = 3;
 	bool LoadImg(std::string path, SDL_Renderer* screen);
 	void Show(SDL_Renderer* des);
 	void HandleInputAction(SDL_Event events, SDL_Renderer* screen);
@@ -31,6 +31,7 @@ public:
 	void CheckToMap(Map& map_data);
 	void CheckGhost(Ghost ghost);
 	void endGame();
+	void set_come_back_time(const int& cb_time) { come_back_time_ = cb_time; }
 private:
 	float x_val_;
 	float y_val_;
@@ -46,6 +47,7 @@ private:
 	int frame_;
 	int status_;
 
+	int come_back_time_;
 };
 
 #endif // !CHARACTER_H_
