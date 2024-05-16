@@ -285,5 +285,6 @@ bool Ghost::checkWall(Map map_data)
 		{
 			return false;
 		}
+		if (x_pos_ < TILE_SIZE && y_pos_ < TILE_SIZE) return false;
 		return true;
 }

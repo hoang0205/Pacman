@@ -8,10 +8,13 @@
 #include <string>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-
+#include "BaseObject.h"
 static SDL_Window* g_window = NULL;
 static SDL_Renderer* g_screen = NULL;
 static SDL_Event g_event;
+static SDL_Surface* g_menu = NULL;
+static SDL_Surface* gScreenSurface = NULL;
+static SDL_Surface* gPNGSurface = NULL;
 
 const int SCREEN_WIDTH = 1344;
 const int SCREEN_HEIGHT = 448;
@@ -50,5 +53,9 @@ struct Input
 	int up_;
 	int down_;
 };
-
+namespace SDL_Common
+{
+	int ShowMenu(SDL_Surface* des, TTF_Font* font);
+	SDL_Surface* loadSurface(std::string path);
+}
 #endif // !COMMON_FUNCTION_H_
