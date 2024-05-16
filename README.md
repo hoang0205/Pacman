@@ -1,8 +1,6 @@
 # Pacman
 
 Pacman is a game in which the player controls Pac-Man, who must eat all the dots inside an enclosed maze while avoiding five colored ghosts.
-
-## Installation
 The game was made using SDL2.0 and C++.
 
 ## How to play
