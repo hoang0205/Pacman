@@ -5,7 +5,7 @@ The game was made using SDL2.0 and C++.
 
 ## How to play
 
-Use the WASD to control Pacman.
+Use the arrow keys to control Pacman.
 
 ## Rule
 This is a hard game because if you die once, the game is over.
