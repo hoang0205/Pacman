@@ -10,7 +10,8 @@ Use the WASD to control Pacman.
 ## Rule
 This is a hard game because if you die once, the game is over.
 
-##In-game footage
+## In-game footage
+The game also displays score and time.
 ![image](https://github.com/hoang0205/Pacman/assets/94461101/b8de3531-8211-4d05-b297-0f678419697c)
 
 ## Source
